@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Flashy Fit Picker</title>
+  <style>
+    body {
+      background: linear-gradient(135deg, #111111, #3e3e3e);
+      color: #fff;
+      font-family: 'Segoe UI', sans-serif;
+      text-align: center;
+      padding: 2rem;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      color: #ff6ec7;
+    }
+
+    .picker {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    select {
+      padding: 0.6rem 1rem;
+      background: #222;
+      color: #fff;
+      border: 2px solid #ff6ec7;
+      border-radius: 8px;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+
+    .outfit-preview {
+      position: relative;
+      width: 300px;
+      margin: 1.5rem auto;
+      height: 400px;
+    }
+
+    .outfit-preview img {
+      position: absolute;
+      width: 100%;
+      height: auto;
+      top: 0;
+      left: 0;
+      transition: opacity 0.3s ease-in-out;
+    }
+
+    .price-box {
+      margin-top: 1rem;
+      font-size: 1.1rem;
+      color: #ff6ec7;
+    }
+
+    .buttons {
+      margin-top: 1rem;
+    }
+
+    .buttons button {
+      background: #ff6ec7;
+      color: #111;
+      border: none;
+      border-radius: 8px;
+      padding: 0.6rem 1.2rem;
+      font-size: 1rem;
+      margin: 0.5rem;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .buttons button:hover {
+      background: #ff4fcf;
+    }
+
+    footer {
+      margin-top: 3rem;
+      color: #aaa;
+      font-size: 0.8rem;
+    }
+
+    @media (max-width: 500px) {
+      .picker {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🔥 Flashy Fit Picker 🔥</h1>
+
+  <div class="picker">
+    <select id="layering" onchange="updateOutfit()">
+      <option value="none">No Layer (₹0)</option>
+      <option value="flannel">Flannel (₹399)</option>
+      <option value="denim">Denim Jacket (₹699)</option>
+    </select>
+
+    <select id="top" onchange="updateOutfit()">
+      <option value="tee">Oversized Tee (₹299)</option>
+      <option value="vest">Ribbed Vest (₹199)</option>
+      <option value="graphic">Graphic Tee (₹349)</option>
+    </select>
+
+    <select id="bottom" onchange="updateOutfit()">
+      <option value="cargos">Cargos (₹599)</option>
+      <option value="jeans">Jeans (₹699)</option>
+      <option value="shorts">Shorts (₹299)</option>
+    </select>
+
+    <select id="shoes" onchange="updateOutfit()">
+      <option value="sneakers">Sneakers (₹899)</option>
+      <option value="boots">Boots (₹1099)</option>
+      <option value="loafers">Loafers (₹749)</option>
+    </select>
+
+    <select id="accessory" onchange="updateOutfit()">
+      <option value="none">No Accessory (₹0)</option>
+      <option value="chain">Silver Chain (₹199)</option>
+      <option value="cap">Cap (₹149)</option>
+      <option value="watch">Watch (₹499)</option>
+    </select>
+  </div>
+
+  <div class="outfit-preview">
+    <img id="layering-img" src="https://dummyimage.com/300x400/111111/ffffff&text=No+Layer" alt="Layer" />
+    <img id="top-img" src="https://dummyimage.com/300x400/222222/ffffff&text=Oversized+Tee" alt="Top" />
+    <img id="bottom-img" src="https://dummyimage.com/300x400/333333/ffffff&text=Cargos" alt="Bottom" />
+    <img id="shoes-img" src="https://dummyimage.com/300x400/444444/ffffff&text=Sneakers" alt="Shoes" />
+    <img id="accessory-img" src="" alt="Accessory" />
+  </div>
+
+  <div class="price-box" id="price-display">
+    Total: ₹0
+  </div>
+
+  <div class="buttons">
+    <button onclick="alert('Added to Cart 🛒')">Add to Cart</button>
+    <button onclick="alert('Buying Now 💸')">Buy Now</button>
+  </div>
+
+  <footer>
+    Made with drip by you 😤🔥
+  </footer>
+
+  <!-- Drip Sound Effect -->
+  <audio id="drip-sound" src="https://www.soundjay.com/button/sounds/button-16.mp3" preload="auto"></audio>
+
+  <script>
+    const outfitImages = {
+      layering: {
+        none: 'https://dummyimage.com/300x400/111111/ffffff&text=No+Layer',
+        flannel: 'https://dummyimage.com/300x400/6e3b3b/ffffff&text=Flannel',
+        denim: 'https://dummyimage.com/300x400/2f4f4f/ffffff&text=Denim+Jacket'
+      },
+      top: {
+        tee: 'https://dummyimage.com/300x400/222222/ffffff&text=Oversized+Tee',
+        vest: 'https://dummyimage.com/300x400/444444/ffffff&text=Ribbed+Vest',
+        graphic: 'https://dummyimage.com/300x400/5a189a/ffffff&text=Graphic+Tee'
+      },
+      bottom: {
+        cargos: 'https://dummyimage.com/300x400/333333/ffffff&text=Cargos',
+        jeans: 'https://dummyimage.com/300x400/2d2d2d/ffffff&text=Jeans',
+        shorts: 'https://dummyimage.com/300x400/1e1e1e/ffffff&text=Shorts'
+      },
+      shoes: {
+        sneakers: 'https://dummyimage.com/300x400/444444/ffffff&text=Sneakers',
+        boots: 'https://dummyimage.com/300x400/555555/ffffff&text=Boots',
+        loafers: 'https://dummyimage.com/300x400/666666/ffffff&text=Loafers'
+      },
+      accessory: {
+        none: '',
+        chain: 'https://dummyimage.com/300x400/bdbdbd/000000&text=Silver+Chain',
+        cap: 'https://dummyimage.com/300x400/222222/ffffff&text=Cap',
+        watch: 'https://dummyimage.com/300x400/999999/ffffff&text=Watch'
+      }
+    };
+
+    const outfitPrices = {
+      layering: { none: 0, flannel: 399, denim: 699 },
+      top: { tee: 299, vest: 199, graphic: 349 },
+      bottom: { cargos: 599, jeans: 699, shorts: 299 },
+      shoes: { sneakers: 899, boots: 1099, loafers: 749 },
+      accessory: { none: 0, chain: 199, cap: 149, watch: 499 }
+    };
+
+    function updateOutfit() {
+      const sound = document.getElementById('drip-sound');
+      sound.currentTime = 0;
+      sound.play();
+
+      const layeringVal = document.getElementById('layering').value;
+      const topVal = document.getElementById('top').value;
+      const bottomVal = document.getElementById('bottom').value;
+      const shoesVal = document.getElementById('shoes').value;
+      const accessoryVal = document.getElementById('accessory').value;
+
+      document.getElementById('layering-img').src = outfitImages.layering[layeringVal];
+      document.getElementById('top-img').src = outfitImages.top[topVal];
+      document.getElementById('bottom-img').src = outfitImages.bottom[bottomVal];
+      document.getElementById('shoes-img').src = outfitImages.shoes[shoesVal];
+      document.getElementById('accessory-img').src = outfitImages.accessory[accessoryVal];
+
+      const total = outfitPrices.layering[layeringVal] +
+                    outfitPrices.top[topVal] +
+                    outfitPrices.bottom[bottomVal] +
+                    outfitPrices.shoes[shoesVal] +
+                    outfitPrices.accessory[accessoryVal];
+
+      document.getElementById('price-display').innerText = `Total: ₹${total}`;
+    }
+
+    window.onload = updateOutfit;
+  </script>
+
+</body>
+</html>
